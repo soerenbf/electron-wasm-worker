@@ -1,14 +1,13 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const WasmPackPlugin = require("@wasm-tool/wasm-pack-plugin");
-const NodePolyfill = require("node-polyfill-webpack-plugin");
+// const WorkerPlugin = require("worker-plugin");
+const { merge } = require("webpack-merge");
 
-module.exports = {
+const common = {
   mode: "development",
-  entry: "./index.ts",
   output: {
     path: path.resolve(__dirname, "dist"),
-    filename: "bundle.js"
   },
   module: {
     rules: [
@@ -29,18 +28,36 @@ module.exports = {
         loader: 'ts-loader',
       },
     ],
-},
+  },
   resolve: {
     extensions: ['.js', '.jsx', '.json', '.ts', '.tsx', '.wasm'],
   },
-  experiments: {
-    syncWebAssembly: true
-  },
-  plugins: [
-    new HtmlWebpackPlugin(),
-    new WasmPackPlugin({
-      crateDirectory: path.resolve(__dirname, ".")
-    }),
-    new NodePolyfill()
-  ]
 };
+
+module.exports = [
+  merge(common, {
+    target: "electron-renderer",
+    entry: "./app/index.ts",
+    output: {
+      filename: "bundle.js"
+    },
+    experiments: {
+      syncWebAssembly: true
+    },
+    plugins: [
+      new HtmlWebpackPlugin({ template: path.resolve(__dirname, "./app/index.html") }),
+      new WasmPackPlugin({
+        crateDirectory: path.resolve(__dirname, ".")
+      }),
+      // new WorkerPlugin()
+    ]
+  }),
+  merge(common,{
+    target: "electron-main",
+    entry: "./app/electron.ts",
+    output: {
+      filename: "electron.js"
+    },
+  })
+];
+  
