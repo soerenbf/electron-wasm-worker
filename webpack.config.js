@@ -5,10 +5,33 @@ const NodePolyfill = require("node-polyfill-webpack-plugin");
 
 module.exports = {
   mode: "development",
-  entry: "./index.js",
+  entry: "./index.ts",
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "bundle.js"
+  },
+  module: {
+    rules: [
+      {
+        test: /\.worker\.ts?$/,
+        use: [
+          {
+            loader: 'worker-loader',
+            options: {
+              publicPath: './',
+            },
+          },
+        ],
+      },
+      {
+        test: /\.tsx?$/,
+        exclude: /node_modules/,
+        loader: 'ts-loader',
+      },
+    ],
+},
+  resolve: {
+    extensions: ['.js', '.jsx', '.json', '.ts', '.tsx', '.wasm'],
   },
   experiments: {
     syncWebAssembly: true
