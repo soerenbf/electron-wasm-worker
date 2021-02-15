@@ -11,17 +11,6 @@ const common = {
   module: {
     rules: [
       {
-        test: /\.worker\.ts?$/,
-        use: [
-          {
-            loader: 'worker-loader',
-            options: {
-              publicPath: './',
-            },
-          },
-        ],
-      },
-      {
         test: /\.tsx?$/,
         exclude: /node_modules/,
         loader: 'ts-loader',

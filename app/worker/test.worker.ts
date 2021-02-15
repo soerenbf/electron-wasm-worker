@@ -1,9 +1,19 @@
-import registerPromiseWorker from 'promise-worker/register';
+let _rust: typeof import("../../pkg");
+async function getRust(): Promise<typeof _rust> {
+    if (!_rust) {
+        _rust = await import("../../pkg");
+    }
 
-async function workerFunction(): Promise<string> {
-    const rust = await import("../../pkg");
-    const greeting = rust.get_greeting("Test");
-    return greeting;
+    return _rust;
 }
 
-registerPromiseWorker(workerFunction);
+async function handleMessage() {
+    const rust = await getRust();
+    const greeting = rust.get_greeting("Test");
+
+    console.log("Worker thread", greeting);
+    self.postMessage(greeting, "*");
+}
+
+self.onmessage = handleMessage;
+self.addEventListener("message", handleMessage);

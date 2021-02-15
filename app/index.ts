@@ -1,7 +1,4 @@
-import PromiseWorker from 'promise-worker';
-// @ts-expect-error : has no default export.
-import Worker from './worker/test.worker';
+const worker = new Worker(new URL("./worker/test.worker.ts", import.meta.url));
 
-const worker = new PromiseWorker(new Worker());
-
-worker.postMessage("").then(console.log);
+worker.onmessage = (e) => console.log("Main thread", e);
+worker.postMessage("");
