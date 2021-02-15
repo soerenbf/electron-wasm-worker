@@ -1,7 +1,7 @@
 {
   "scripts": {
-    "start": "webpack",
-    "serve": "webpack serve",
+    "build": "webpack",
+    "start": "webpack serve",
     "clean": "rimraf dist pkg target"
   },
   "devDependencies": {
