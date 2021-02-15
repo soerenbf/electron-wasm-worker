@@ -7,10 +7,20 @@
 //     return _rust;
 // }
 
+let _imported: typeof import("./import-test").default;
+async function getImported() {
+    if (!_imported) {
+        _imported = (await import("./import-test")).default;
+    }
+
+    return _imported;
+}
+
 async function handleMessage() {
     // const rust = await getRust();
     // const greeting = rust.get_greeting("Test");
-    const greeting = "Hello!";
+    const dyn = await getImported();
+    const greeting = dyn();
 
     console.log("Worker thread", greeting);
     (self as any).postMessage(greeting);
