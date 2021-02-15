@@ -1,7 +1,6 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const WasmPackPlugin = require("@wasm-tool/wasm-pack-plugin");
-// const WorkerPlugin = require("worker-plugin");
 const { merge } = require("webpack-merge");
 
 const common = {
@@ -41,15 +40,11 @@ module.exports = [
     output: {
       filename: "bundle.js"
     },
-    experiments: {
-      syncWebAssembly: true
-    },
     plugins: [
       new HtmlWebpackPlugin({ template: path.resolve(__dirname, "./app/index.html") }),
       new WasmPackPlugin({
         crateDirectory: path.resolve(__dirname, ".")
       }),
-      // new WorkerPlugin()
     ]
   }),
   merge(common,{

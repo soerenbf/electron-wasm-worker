@@ -6,10 +6,4 @@ async function workerFunction(): Promise<string> {
     return greeting;
 }
 
-// addEventListener("message", async () => {
-//     const greeting = await workerFunction();
-//     console.log(greeting);
-//     postMessage(greeting, "");
-// });
-
 registerPromiseWorker(workerFunction);
