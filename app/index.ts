@@ -1,7 +1,5 @@
 import PromiseWorker from 'promise-worker';
-// @ts-expect-error : has no default export.
-import Worker from './worker/test.worker';
 
-const worker = new PromiseWorker(new Worker());
+const worker = new PromiseWorker(new Worker(new URL("./worker/test.worker.ts", import.meta.url)));
 
 worker.postMessage("").then(console.log);
